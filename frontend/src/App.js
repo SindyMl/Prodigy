@@ -93,11 +93,9 @@ const AuthProvider = ({ children }) => {
 
 const useAuth = () => useContext(AuthContext);
 
-// API Helper - Updated for proper mutation handling
-const useApiCall = () => {
-  const { user } = useAuth();
-  
-  const apiCall = async (endpoint, options = {}) => {
+// API Helper - Fixed for mutations
+const createApiCall = (user) => {
+  return async (endpoint, options = {}) => {
     const config = {
       url: `${API}${endpoint}`,
       method: 'GET',
@@ -112,8 +110,6 @@ const useApiCall = () => {
     const response = await axios(config);
     return response.data;
   };
-  
-  return { apiCall };
 };
 
 // Components
