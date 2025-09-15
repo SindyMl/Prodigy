@@ -352,7 +352,7 @@ const StudySession = () => {
   
   const queryClient = useQueryClient();
   
-  const { data: flashcards } = useQuery('flashcards', () => apiCall('/flashcards'));
+  const { data: flashcards } = useQuery({ queryKey: ['flashcards'], queryFn: () => apiCall('/flashcards') });
   
   const createFlashcard = useMutation(
     (data) => apiCall('/flashcards', { method: 'POST', data }),
