@@ -354,27 +354,23 @@ const StudySession = () => {
   
   const { data: flashcards } = useQuery({ queryKey: ['flashcards'], queryFn: () => apiCall('/flashcards') });
   
-  const createFlashcard = useMutation(
-    (data) => apiCall('/flashcards', { method: 'POST', data }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('flashcards');
-        setQuestion('');
-        setAnswer('');
-      }
+  const createFlashcard = useMutation({
+    mutationFn: (data) => apiCall('/flashcards', { method: 'POST', data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['flashcards'] });
+      setQuestion('');
+      setAnswer('');
     }
-  );
+  });
   
-  const createEvent = useMutation(
-    (data) => apiCall('/events', { method: 'POST', data }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('todayEvents');
-        setEventTitle('');
-        setEventDateTime('');
-      }
+  const createEvent = useMutation({
+    mutationFn: (data) => apiCall('/events', { method: 'POST', data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['todayEvents'] });
+      setEventTitle('');
+      setEventDateTime('');
     }
-  );
+  });
 
   const handleFlashcardSubmit = (e) => {
     e.preventDefault();
