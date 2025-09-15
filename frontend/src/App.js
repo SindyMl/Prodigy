@@ -485,12 +485,10 @@ const KanbanBoard = ({ projectId }) => {
   const queryClient = useQueryClient();
   const { data: tasks = [] } = useQuery({ queryKey: ['tasks', projectId], queryFn: () => apiCall(`/projects/${projectId}/tasks`) });
   
-  const updateTask = useMutation(
-    ({ taskId, ...data }) => apiCall(`/tasks/${taskId}`, { method: 'PUT', data }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(['tasks', projectId])
-    }
-  );
+  const updateTask = useMutation({
+    mutationFn: ({ taskId, ...data }) => apiCall(`/tasks/${taskId}`, { method: 'PUT', data }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks', projectId] })
+  });
 
   const columns = {
     backlog: { title: 'Backlog', color: 'bg-gray-600' },
