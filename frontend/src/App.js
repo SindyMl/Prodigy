@@ -93,20 +93,27 @@ const AuthProvider = ({ children }) => {
 
 const useAuth = () => useContext(AuthContext);
 
-// API Helper
-const apiCall = async (endpoint, options = {}) => {
+// API Helper - Updated for proper mutation handling
+const useApiCall = () => {
   const { user } = useAuth();
-  const config = {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(user?.token && { Authorization: `Bearer ${user.token}` }),
-      ...options.headers
-    }
+  
+  const apiCall = async (endpoint, options = {}) => {
+    const config = {
+      url: `${API}${endpoint}`,
+      method: 'GET',
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(user?.token && { Authorization: `Bearer ${user.token}` }),
+        ...options.headers
+      }
+    };
+    
+    const response = await axios(config);
+    return response.data;
   };
   
-  const response = await axios(`${API}${endpoint}`, config);
-  return response.data;
+  return { apiCall };
 };
 
 // Components
