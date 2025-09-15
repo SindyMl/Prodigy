@@ -23,22 +23,15 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Initialize Firebase Admin SDK
+# Initialize Firebase Admin SDK (Mock for demo)
+# For demo purposes, we'll skip Firebase initialization since we're using mock auth
+firebase_initialized = False
 try:
     firebase_admin.get_app()
+    firebase_initialized = True
 except ValueError:
-    # Initialize Firebase if not already initialized
-    cred = credentials.Certificate({
-        "type": "service_account",
-        "project_id": "prodigy-8682a",
-        "private_key_id": "dummy",
-        "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC7VJTUt9Us8cKB\n-----END PRIVATE KEY-----\n",
-        "client_email": "firebase-adminsdk-xyz@prodigy-8682a.iam.gserviceaccount.com",
-        "client_id": "dummy",
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-    })
-    firebase_admin.initialize_app(cred)
+    # Skip Firebase initialization for demo - using mock authentication
+    logging.info("Skipping Firebase initialization - using mock authentication for demo")
 
 # Create the main app
 app = FastAPI()
