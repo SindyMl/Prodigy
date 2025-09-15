@@ -228,6 +228,7 @@ const Login = () => {
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const apiCall = createApiCall(user);
   
   const { data: quote } = useQuery({ queryKey: ['quote'], queryFn: () => apiCall('/quote') });
   const { data: todayEvents } = useQuery({ queryKey: ['todayEvents'], queryFn: () => apiCall('/events/today') });
