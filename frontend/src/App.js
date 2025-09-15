@@ -94,22 +94,24 @@ const AuthProvider = ({ children }) => {
 const useAuth = () => useContext(AuthContext);
 
 // API Helper - Fixed for mutations
-const createApiCall = (user) => {
-  return async (endpoint, options = {}) => {
-    const config = {
-      url: `${API}${endpoint}`,
-      method: 'GET',
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(user?.token && { Authorization: `Bearer ${user.token}` }),
-        ...options.headers
-      }
-    };
-    
-    const response = await axios(config);
-    return response.data;
+const apiCall = async (endpoint, options = {}) => {
+  // Get user from localStorage for API calls
+  const savedUser = localStorage.getItem('prodigy_user');
+  const user = savedUser ? JSON.parse(savedUser) : null;
+  
+  const config = {
+    url: `${API}${endpoint}`,
+    method: 'GET',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(user?.token && { Authorization: `Bearer ${user.token}` }),
+      ...options.headers
+    }
   };
+  
+  const response = await axios(config);
+  return response.data;
 };
 
 // Components
