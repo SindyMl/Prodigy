@@ -754,7 +754,7 @@ const WorkSession = () => {
 };
 
 const Calendar = () => {
-  const { data: events = [] } = useQuery('events', () => apiCall('/events'));
+  const { data: events = [] } = useQuery({ queryKey: ['events'], queryFn: () => apiCall('/events') });
 
   const calendarEvents = events.map(event => ({
     id: event.id,
