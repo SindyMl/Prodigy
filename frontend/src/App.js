@@ -226,8 +226,8 @@ const Login = () => {
 const Dashboard = () => {
   const { user } = useAuth();
   
-  const { data: quote } = useQuery('quote', () => apiCall('/quote'));
-  const { data: todayEvents } = useQuery('todayEvents', () => apiCall('/events/today'));
+  const { data: quote } = useQuery({ queryKey: ['quote'], queryFn: () => apiCall('/quote') });
+  const { data: todayEvents } = useQuery({ queryKey: ['todayEvents'], queryFn: () => apiCall('/events/today') });
 
   return (
     <div className="space-y-6">
