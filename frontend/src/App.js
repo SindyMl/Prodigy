@@ -563,29 +563,25 @@ const WorkSession = () => {
   
   const { data: projects = [] } = useQuery({ queryKey: ['projects'], queryFn: () => apiCall('/projects') });
   
-  const createProject = useMutation(
-    (data) => apiCall('/projects', { method: 'POST', data }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('projects');
-        setProjectTitle('');
-        setProjectDescription('');
-        setShowProjectForm(false);
-      }
+  const createProject = useMutation({
+    mutationFn: (data) => apiCall('/projects', { method: 'POST', data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      setProjectTitle('');
+      setProjectDescription('');
+      setShowProjectForm(false);
     }
-  );
+  });
   
-  const createTask = useMutation(
-    (data) => apiCall(`/projects/${selectedProject.id}/tasks`, { method: 'POST', data }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['tasks', selectedProject.id]);
-        setTaskTitle('');
-        setTaskDescription('');
-        setShowTaskForm(false);
-      }
+  const createTask = useMutation({
+    mutationFn: (data) => apiCall(`/projects/${selectedProject.id}/tasks`, { method: 'POST', data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks', selectedProject.id] });
+      setTaskTitle('');
+      setTaskDescription('');
+      setShowTaskForm(false);
     }
-  );
+  });
 
   const handleProjectSubmit = (e) => {
     e.preventDefault();
