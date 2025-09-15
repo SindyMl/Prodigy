@@ -567,7 +567,7 @@ const WorkSession = () => {
   
   const queryClient = useQueryClient();
   
-  const { data: projects = [] } = useQuery('projects', () => apiCall('/projects'));
+  const { data: projects = [] } = useQuery({ queryKey: ['projects'], queryFn: () => apiCall('/projects') });
   
   const createProject = useMutation(
     (data) => apiCall('/projects', { method: 'POST', data }),
