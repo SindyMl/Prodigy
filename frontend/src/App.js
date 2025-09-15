@@ -37,36 +37,51 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        // For demo purposes, use a mock token
-        setUser({
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          token: `mock_${firebaseUser.uid}`
-        });
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
+    // For demo purposes, check if user is already logged in via localStorage
+    const savedUser = localStorage.getItem('prodigy_user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+    setLoading(false);
   }, []);
 
   const login = async (email, password) => {
-    const result = await signInWithEmailAndPassword(auth, email, password);
-    return result;
+    try {
+      // For demo purposes, create a mock user
+      const mockUser = {
+        uid: `user_${Date.now()}`,
+        email: email,
+        displayName: email.split('@')[0],
+        token: `mock_user_${Date.now()}`
+      };
+      setUser(mockUser);
+      localStorage.setItem('prodigy_user', JSON.stringify(mockUser));
+      return { user: mockUser };
+    } catch (error) {
+      throw new Error('Login failed');
+    }
   };
 
   const register = async (email, password) => {
-    const result = await createUserWithEmailAndPassword(auth, email, password);
-    return result;
+    try {
+      // For demo purposes, create a mock user
+      const mockUser = {
+        uid: `user_${Date.now()}`,
+        email: email,
+        displayName: email.split('@')[0],
+        token: `mock_user_${Date.now()}`
+      };
+      setUser(mockUser);
+      localStorage.setItem('prodigy_user', JSON.stringify(mockUser));
+      return { user: mockUser };
+    } catch (error) {
+      throw new Error('Registration failed');
+    }
   };
 
   const logout = async () => {
-    await signOut(auth);
+    setUser(null);
+    localStorage.removeItem('prodigy_user');
   };
 
   return (
