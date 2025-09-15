@@ -487,7 +487,7 @@ const StudySession = () => {
 
 const KanbanBoard = ({ projectId }) => {
   const queryClient = useQueryClient();
-  const { data: tasks = [] } = useQuery(['tasks', projectId], () => apiCall(`/projects/${projectId}/tasks`));
+  const { data: tasks = [] } = useQuery({ queryKey: ['tasks', projectId], queryFn: () => apiCall(`/projects/${projectId}/tasks`) });
   
   const updateTask = useMutation(
     ({ taskId, ...data }) => apiCall(`/tasks/${taskId}`, { method: 'PUT', data }),
